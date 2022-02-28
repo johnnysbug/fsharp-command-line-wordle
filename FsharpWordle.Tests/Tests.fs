@@ -21,19 +21,18 @@ let ``WordService returns a different word each time`` () =
 type TestData () =    
     let values : seq<obj[]>  =
         seq {
-            yield [|"straw"; "straw"; [Green; Green; Green; Green; Green]|]
-            yield [|"straw"; "train"; [Gray; Yellow; Yellow; Yellow; Gray]|]
-            yield [|"straw"; "mulch"; [Gray; Gray; Gray; Gray; Gray]|]
-            yield [|"class"; "smart"; [Gray; Gray; Green; Yellow; Gray]|]
-            yield [|"smart"; "class"; [Yellow; Gray; Green; Gray; Gray]|]
-            yield [|"quick"; "vivid"; [Gray; Gray; Yellow; Gray; Gray]|]
-            yield [|"dildo"; "vivid"; [Yellow; Green; Gray; Gray; Gray]|]
-            yield [|"silly"; "lilly"; [Gray; Green; Green; Green; Green]|]
-            yield [|"lilly"; "silly"; [Gray; Green; Green; Green; Green]|]
-            yield [|"buddy"; "added"; [Gray; Gray; Green; Yellow; Gray]|]
-            yield [|"added"; "buddy"; [Gray; Yellow; Green; Gray; Gray]|]
-            yield [|"abate"; "eager"; [Yellow; Gray; Gray; Gray; Yellow]|]
-            yield [|"eager"; "abate"; [Yellow; Yellow; Gray; Gray; Gray]|]
+            yield [|"straw"; "straw"; [('s', Green); ('t', Green); ('r', Green); ('a', Green); ('w', Green)]|]
+            yield [|"straw"; "train"; [('s', Gray); ('t', Yellow); ('r', Yellow); ('a', Yellow); ('w', Gray)]|]
+            yield [|"straw"; "mulch"; [('s', Gray); ('t', Gray); ('r', Gray); ('a', Gray); ('w', Gray)]|]
+            yield [|"class"; "smart"; [('c', Gray); ('l', Gray); ('a', Green); ('s', Yellow); ('s', Gray)]|]
+            yield [|"smart"; "class"; [('s', Yellow); ('m', Gray); ('a', Green); ('r', Gray); ('t', Gray)]|]
+            yield [|"quick"; "vivid"; [('q', Gray); ('u', Gray); ('i', Yellow); ('c', Gray); ('k', Gray)]|]
+            yield [|"silly"; "lilly"; [('s', Gray); ('i', Green); ('l', Green); ('l', Green); ('y', Green)]|]
+            yield [|"lilly"; "silly"; [('l', Gray); ('i', Green); ('l', Green); ('l', Green); ('y', Green)]|]
+            yield [|"buddy"; "added"; [('b', Gray); ('u', Gray); ('d', Green); ('d', Yellow); ('y', Gray)]|]
+            yield [|"added"; "buddy"; [('a', Gray); ('d', Yellow); ('d', Green); ('e', Gray); ('d', Gray)]|]
+            yield [|"abate"; "eager"; [('a', Yellow); ('b', Gray); ('a', Gray); ('t', Gray); ('e', Yellow)]|]
+            yield [|"eager"; "abate"; [('e', Yellow); ('a', Yellow); ('g', Gray); ('e', Gray); ('r', Gray)]|]
         }
     interface seq<obj[]> with
         member _.GetEnumerator () = values.GetEnumerator()
@@ -42,6 +41,6 @@ type TestData () =
 
 [<Theory>]
 [<ClassData(typeof<TestData>)>]
-let ``GameService produces correct matches`` (guess: string, answer: string, matches: seq<MatchColor>) =
+let ``GameService produces correct matches`` (guess: string, answer: string, matches: seq<char * MatchColor>) =
     let actualMatches = GameService.matches guess answer
-    Assert.Equal<seq<MatchColor>>(matches, actualMatches)
+    Assert.Equal<seq<char * MatchColor>>(matches, actualMatches)

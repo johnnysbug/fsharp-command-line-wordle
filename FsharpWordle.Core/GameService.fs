@@ -39,4 +39,33 @@ module GameService =
         |> Seq.concat
         |> Seq.distinct
         |> Seq.sortBy (fun (i, _, _) -> i)
-        |> Seq.map (fun (_, _, c) -> c)
+        |> Seq.map (fun (_, l, c) -> (l, c))
+
+    let createContext answer =
+        let board = Array2D.init 5 6 (fun _ _ -> (' ', Gray))
+        { 
+            Board = board
+            Answer = answer
+            Guess = ""
+            RemainingTries = 6
+            Message = "Good luck!" }
+
+    let winningAttempt attempt =
+        attempt |> Seq.forall (fun (_, c) -> c = Green)
+
+    let takeTurn (context: Context) =
+        if WordService.isValidGuess(context.Guess) then
+            let attempt = matches context.Guess context.Answer
+            let board = context.Board
+            attempt |> Seq.iteri (fun i (l, c) ->
+                board[i, 6 - context.RemainingTries] <- (l, c)
+            )
+
+            let won = winningAttempt attempt
+
+            {context with 
+                Board = board
+                RemainingTries = if won then 0 else context.RemainingTries - 1
+                Message = if won then "You win!" else ""}
+        else
+            {context with Message = "Not in Word list"}

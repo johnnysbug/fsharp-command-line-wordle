@@ -8,5 +8,4 @@ module Domain =
         Answer: string;
         Guess: string;
         RemainingTries: int;
-        Message: string;
-    }
+        Message: string;}
