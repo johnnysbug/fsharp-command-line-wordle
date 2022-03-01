@@ -17,7 +17,7 @@ module RenderService =
         Console.ForegroundColor <- if color = Gray then ConsoleColor.White else ConsoleColor.Black
         Console.Write($" {text} ")
         Console.ResetColor()
-        Console.Write(" ")
+        Console.Write("")
 
     let drawKeyboard keyboard =
         keyboard.FirstRow |> Seq.iter (fun k -> drawCell k)
@@ -38,12 +38,12 @@ module RenderService =
         Console.WriteLine()
         
         for y = 0 to Array2D.length2 board - 1 do
-            Console.Write("            ")
+            Console.Write("           ")
             for x = 0 to Array2D.length1 board - 1 do
                 drawCell board[x, y]
     
             Console.WriteLine()
             Console.WriteLine()
     
-        Console.WriteLine($"              {message}")
+        Console.WriteLine($"             {message}")
         Console.WriteLine()

@@ -46,8 +46,17 @@ module GameService =
             |> Seq.skip (diff)
             |> Seq.map (fun (i, c) -> (i, c, Gray)))
 
-    let winningAttempt attempt =
+    let private winningAttempt attempt =
         attempt |> Seq.forall (fun (_, c) -> c = Green)
+
+    let private winningMessage remainingTries =
+        match remainingTries with
+        | 5 -> "Amazing!"
+        | 4 -> "Fantastic!"
+        | 3 -> "Great!"
+        | 2 -> "Not bad"
+        | 1 -> "Cutting it close!"
+        | _ -> "Phew!"
         
     let matches (guess:string) (answer:string) =
         let guessChars = guess.ToCharArray() |> Seq.indexed
@@ -85,14 +94,14 @@ module GameService =
             attempt |> Seq.iteri (fun i (l, c) ->
                 board[i, 6 - context.RemainingTries] <- (l, c)
             )
+            
             let keyboard = updateKeyboard context.Keyboard attempt
-
             let won = winningAttempt attempt
 
             {context with 
                 Board = board
                 Keyboard = keyboard
                 RemainingTries = if won then 0 else context.RemainingTries - 1
-                Message = if won then "You win!" else ""}
+                Message = if won then winningMessage(context.RemainingTries - 1) else ""}
         else
             {context with Message = "Not in Word list"}
