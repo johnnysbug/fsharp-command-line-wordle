@@ -1,10 +1,16 @@
 namespace FsharpWordle.Core
 
 module Domain =
-    type MatchColor = Green|Yellow|Gray
+    type Color = Green|Yellow|Gray|LightGray
+
+    type Keyboard = {
+        FirstRow: (char * Color) [];
+        SecondRow: (char * Color) [];
+        ThirdRow: (char * Color) [];}
     
     type Context = {
-        Board: (char * MatchColor) [,];
+        Board: (char * Color) [,];
+        Keyboard: Keyboard;
         Answer: string;
         Guess: string;
         RemainingTries: int;

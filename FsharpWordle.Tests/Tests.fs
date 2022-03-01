@@ -41,6 +41,6 @@ type TestData () =
 
 [<Theory>]
 [<ClassData(typeof<TestData>)>]
-let ``GameService produces correct matches`` (guess: string, answer: string, matches: seq<char * MatchColor>) =
+let ``GameService produces correct matches`` (guess: string, answer: string, matches: seq<char * Color>) =
     let actualMatches = GameService.matches guess answer
-    Assert.Equal<seq<char * MatchColor>>(matches, actualMatches)
+    Assert.Equal<seq<char * Color>>(matches, actualMatches)

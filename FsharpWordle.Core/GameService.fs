@@ -2,7 +2,31 @@
 
 module GameService =
     open FsharpWordle.Core.Domain
-    
+
+    let private keyboard _ = 
+        let firstRow = [| 'q';'w';'e';'r';'t';'y';'u';'i';'o';'p' |] |> Array.map (fun c -> (c, LightGray))
+        let secondRow = [| 'a';'s';'d';'f';'g';'h';'j';'k';'l' |] |> Array.map (fun c -> (c, LightGray))
+        let thirdRow = [| 'z';'x';'c';'v';'b';'n';'m' |] |> Array.map (fun c -> (c, LightGray))
+        {   FirstRow = firstRow
+            SecondRow = secondRow
+            ThirdRow = thirdRow}
+
+    let private updateKeyboard (keyboard: Keyboard) (guess: seq<(char * Color)>) =
+        guess 
+        |> Seq.iter (fun (key, color) ->
+            let firstRowIndex = keyboard.FirstRow |> Array.tryFindIndex (fun (k, _) -> k = key)
+            if firstRowIndex.IsSome then
+                keyboard.FirstRow[firstRowIndex.Value] <- (key, color)
+            else
+                let secondRowIndex = keyboard.SecondRow |> Array.tryFindIndex (fun (k, _) -> k = key)
+                if secondRowIndex.IsSome then
+                    keyboard.SecondRow[secondRowIndex.Value] <- (key, color)
+                else
+                    let thirdRowIndex = keyboard.ThirdRow |> Array.tryFindIndex (fun (k, _) -> k = key)
+                    if thirdRowIndex.IsSome then
+                        keyboard.ThirdRow[thirdRowIndex.Value] <- (key, color))
+        keyboard
+        
     let private countChars = fun (c: char) (chars: seq<(int * char)>) -> 
         chars
         |> Seq.where (fun (_, g) -> g = c)
@@ -22,6 +46,9 @@ module GameService =
             |> Seq.skip (diff)
             |> Seq.map (fun (i, c) -> (i, c, Gray)))
 
+    let winningAttempt attempt =
+        attempt |> Seq.forall (fun (_, c) -> c = Green)
+        
     let matches (guess:string) (answer:string) =
         let guessChars = guess.ToCharArray() |> Seq.indexed
         let answerChars = answer.ToCharArray() |> Seq.indexed
@@ -45,13 +72,11 @@ module GameService =
         let board = Array2D.init 5 6 (fun _ _ -> (' ', Gray))
         { 
             Board = board
+            Keyboard = keyboard()
             Answer = answer
             Guess = ""
             RemainingTries = 6
             Message = "Good luck!" }
-
-    let winningAttempt attempt =
-        attempt |> Seq.forall (fun (_, c) -> c = Green)
 
     let takeTurn (context: Context) =
         if WordService.isValidGuess(context.Guess) then
@@ -60,11 +85,13 @@ module GameService =
             attempt |> Seq.iteri (fun i (l, c) ->
                 board[i, 6 - context.RemainingTries] <- (l, c)
             )
+            let keyboard = updateKeyboard context.Keyboard attempt
 
             let won = winningAttempt attempt
 
             {context with 
                 Board = board
+                Keyboard = keyboard
                 RemainingTries = if won then 0 else context.RemainingTries - 1
                 Message = if won then "You win!" else ""}
         else
