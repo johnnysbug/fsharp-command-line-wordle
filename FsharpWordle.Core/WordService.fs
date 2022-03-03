@@ -16,3 +16,6 @@ module WordService =
     let isValidGuess guess =
         combined
         |> Seq.contains guess
+
+    let isLongEnough (guess: string) =
+        guess.Length = 5

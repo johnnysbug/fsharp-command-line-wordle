@@ -5,6 +5,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Domain.fs" />
+    <Compile Include="MatchingService.fs" />
+    <Compile Include="KeyboardService.fs" />
     <Compile Include="RenderService.fs" />
     <Compile Include="WordService.fs" />
     <Compile Include="GameService.fs" />

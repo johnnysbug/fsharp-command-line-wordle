@@ -2,21 +2,7 @@ module Tests
 
 open Xunit
 open FsharpWordle.Core.Domain
-open FsharpWordle.Core.WordService
 open FsharpWordle.Core
-
-[<Fact>]
-let ``WordService returns a five letter word`` () =
-    let expectedLength = 5
-    let word = randomWord()
-    let actualLength = word.Length
-    Assert.Equal(expectedLength, actualLength)
-
-[<Fact>]
-let ``WordService returns a different word each time`` () =
-    let firstWord = randomWord()
-    let secondWord = randomWord()
-    Assert.NotEqual<string>(firstWord, secondWord)
 
 type TestData () =    
     let values : seq<obj[]>  =
@@ -34,13 +20,27 @@ type TestData () =
             yield [|"abate"; "eager"; [('a', Yellow); ('b', Gray); ('a', Gray); ('t', Gray); ('e', Yellow)]|]
             yield [|"eager"; "abate"; [('e', Yellow); ('a', Yellow); ('g', Gray); ('e', Gray); ('r', Gray)]|]
         }
+
     interface seq<obj[]> with
         member _.GetEnumerator () = values.GetEnumerator()
         member _.GetEnumerator () =
             values.GetEnumerator() :> System.Collections.IEnumerator
 
+[<Fact>]
+let ``WordService returns a five letter word`` () =
+    let expectedLength = 5
+    let word = WordService.randomWord()
+    let actualLength = word.Length
+    Assert.Equal(expectedLength, actualLength)
+
+[<Fact>]
+let ``WordService returns a different word each time`` () =
+    let firstWord = WordService.randomWord()
+    let secondWord = WordService.randomWord()
+    Assert.NotEqual<string>(firstWord, secondWord)
+
 [<Theory>]
 [<ClassData(typeof<TestData>)>]
-let ``GameService produces correct matches`` (guess: string, answer: string, matches: seq<char * Color>) =
-    let actualMatches = GameService.matches guess answer
+let ``MatchingService produces correct matches`` (guess: string, answer: string, matches: seq<char * Color>) =
+    let actualMatches = MatchingService.matches guess answer
     Assert.Equal<seq<char * Color>>(matches, actualMatches)

@@ -11,9 +11,9 @@ let rec main context =
     if context.RemainingTries = 0 then 
         Console.ReadKey() |> ignore
         Environment.Exit 0
-
-    main(GameService.takeTurn({context with Guess = Console.ReadLine()}))
-    main(context)
+    
+    let info = Console.ReadKey(true)
+    main(GameService.takeTurn({context with KeyPressed = Some(info)}))
 
 [<EntryPoint>]
 main(GameService.createContext(WordService.randomWord()))
