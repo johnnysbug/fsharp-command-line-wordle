@@ -10,5 +10,10 @@
     <Compile Include="RenderService.fs" />
     <Compile Include="WordService.fs" />
     <Compile Include="GameService.fs" />
+    <EmbeddedResource Include="Resources\allowed-guesses.txt" />
+    <EmbeddedResource Include="Resources\answers.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources\" />
   </ItemGroup>
 </Project>
