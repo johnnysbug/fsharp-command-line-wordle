@@ -40,6 +40,12 @@ After submitting your guess:
 
 ---
 ## Examples of game in play
+<p align="center">
+<img src="https://user-images.githubusercontent.com/1800439/156499944-709539b1-104b-4832-9636-2345e3844609.png" width="33%"/>
+<img src="https://user-images.githubusercontent.com/1800439/156500265-1aa87666-7f71-4fb3-9842-8ebdf0041bba.png" width="33%"/>
+<img src="https://user-images.githubusercontent.com/1800439/156501097-79c17f4e-10cc-44de-9062-434587d0bdbb.png" width="33%"/>
+
+</p>
 
 
 ## Troubleshooting
