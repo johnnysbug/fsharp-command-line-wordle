@@ -1,6 +1,8 @@
 # F# Wordle
 
-Just a fun project to help learn F# by puzzling through Wordle via the command line
+Just a fun project to help learn F# by puzzling through [Wordle](https://www.nytimes.com/games/wordle/index.html) via the command line.
+
+Game loop logic inspiration came from [CosX's](https://github.com/CosX) [snake.ai.fs project](https://github.com/CosX/snake.ai.fs)
 
 ---
 ## Requires
