@@ -11,11 +11,11 @@ module RenderService =
         | Gray -> ConsoleColor.DarkGray
         | LightGray -> ConsoleColor.Gray
     
-    let private drawCell (text, color) =
+    let private drawCell letter =
         Console.Write(" ")
-        Console.BackgroundColor <- getColor (color)
-        Console.ForegroundColor <- if color = Gray then ConsoleColor.White else ConsoleColor.Black
-        Console.Write($" {text} ")
+        Console.BackgroundColor <- getColor (letter.Color)
+        Console.ForegroundColor <- if letter.Color = Gray then ConsoleColor.White else ConsoleColor.Black
+        Console.Write($" {letter.Value} ")
         Console.ResetColor()
         Console.Write("")
 
@@ -29,7 +29,7 @@ module RenderService =
             Console.WriteLine())
         Console.WriteLine()
 
-    let drawBoard (board: (char * Color)[,], message: string) =
+    let drawBoard (board: Letter[,], message: string) =
         Console.Clear()
         let playableWidth = 41
         let title = "F# Commandline Wordle"

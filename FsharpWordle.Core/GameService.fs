@@ -5,7 +5,7 @@ module GameService =
     open System
 
     let private winningAttempt attempt =
-        attempt |> Seq.forall (fun (_, c) -> c = Green)
+        attempt |> List.forall (fun l -> l.Color = Green)
 
     let private winningMessage remainingTries =
         match remainingTries with
@@ -18,9 +18,8 @@ module GameService =
 
     let private updateBoard context attempt =
         let board = context.Board
-        attempt |> Seq.iteri (fun i (l, c) ->
-            board[i, 6 - context.RemainingTries] <- (l, c))
-        {context with Board = board}
+        attempt |> List.iteri (fun i l -> board[i, 6 - context.RemainingTries] <- l)
+        { context with Board = board }
     
     let private processEnter context =
         if not(WordService.isLongEnough context.Guess) then
@@ -31,13 +30,13 @@ module GameService =
             let keyboard = KeyboardService.updateKeyboard updatedBoardContext.Keyboard attempt
             let won = winningAttempt attempt
 
-            {updatedBoardContext with 
+            { updatedBoardContext with 
                 Keyboard = keyboard
                 Guess = ""
                 KeyPressed = None
                 RemainingTries = if won then 0 else context.RemainingTries - 1
-                Message = if won then winningMessage(context.RemainingTries - 1) else ""}
-        else {context with Message = "Not in Word list"}
+                Message = if won then winningMessage(context.RemainingTries - 1) else "" }
+        else { context with Message = "Not in Word list" }
 
     let private processBackspace context =
         let guessLength = context.Guess.Length
@@ -45,7 +44,11 @@ module GameService =
             let guess = context.Guess.Substring(0, guessLength - 1).PadRight(5, ' ')
             let guessBuffer = 
                 guess
-                |> Seq.map (fun c -> (c, Gray))
+                |> Seq.map (fun c -> { 
+                    Index = 0
+                    Value = c
+                    Color = Gray })
+                 |> Seq.toList
             let updatedBoardContext = updateBoard context guessBuffer
             {updatedBoardContext with 
                 Guess = guess.Replace(" ", "")
@@ -58,7 +61,12 @@ module GameService =
             let updatedGuess = 
                 sprintf "%s%s" guess (letter.ToString().ToLowerInvariant())
             let guessBuffer = 
-                updatedGuess |> Seq.map (fun c -> (c, Gray))
+                updatedGuess
+                |> Seq.map (fun c -> { 
+                    Index = 0
+                    Value = c
+                    Color = Gray })
+                |> Seq.toList
             let updatedBoardContext = updateBoard context guessBuffer
             {updatedBoardContext with 
                 Guess = updatedGuess 
@@ -79,7 +87,10 @@ module GameService =
         | None -> context
 
     let createContext answer =
-        let board = Array2D.init 5 6 (fun _ _ -> (' ', Gray))
+        let board = Array2D.init 5 6 (fun _ _ -> { 
+            Index = 0
+            Value = ' '
+            Color = Gray })
         {   Board = board
             Keyboard = KeyboardService.keyboard
             Answer = answer

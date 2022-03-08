@@ -4,12 +4,11 @@ module Domain =
     open System
 
     type Color = Green|Yellow|Gray|LightGray
-
-    type Keyboard = {
-        Keys: (char * Color) array array;}
+    type Letter = { Index: int; Value: char; Color: Color }
+    type Keyboard = { Keys: Letter array array; }
     
     type Context = {
-        Board: (char * Color) [,];
+        Board: Letter [,];
         Keyboard: Keyboard;
         Answer: string;
         Guess: string;

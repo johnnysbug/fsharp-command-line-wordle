@@ -38,9 +38,17 @@ let ``WordService returns a different word each time`` () =
     let firstWord = WordService.randomWord()
     let secondWord = WordService.randomWord()
     Assert.NotEqual<string>(firstWord, secondWord)
-
+    
 [<Theory>]
 [<ClassData(typeof<TestData>)>]
 let ``MatchingService produces correct matches`` (guess: string, answer: string, matches: seq<char * Color>) =
     let actualMatches = MatchingService.matches guess answer
-    Assert.Equal<seq<char * Color>>(matches, actualMatches)
+    let expectedMatches = 
+        matches 
+        |> Seq.mapi (fun i (l, c) -> { 
+            Index = i 
+            Value = l
+            Color = c})
+        |> Seq.toList
+    Assert.Equal<List<Letter>>(expectedMatches, actualMatches)
+        
