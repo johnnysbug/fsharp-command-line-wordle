@@ -16,10 +16,10 @@ module KeyboardService =
         |]
         { Keys = keys }
 
-    let updateKeyboard (keyboard: Keyboard) (guess: Letter list) =
+    let updateKeyboard (keyboard: Keyboard) (guess: Letter array) =
         let keys = keyboard.Keys
         guess 
-        |> List.iter (fun l ->
+        |> Array.iter (fun l ->
             for x = 0 to 2 do
                 for y = 0 to keys[x].Length - 1 do
                     if (keys[x][y]).Value = l.Value then 

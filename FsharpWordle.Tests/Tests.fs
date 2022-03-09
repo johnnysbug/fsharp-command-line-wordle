@@ -49,6 +49,5 @@ let ``MatchingService produces correct matches`` (guess: string, answer: string,
             Index = i 
             Value = l
             Color = c})
-        |> Seq.toList
-    Assert.Equal<List<Letter>>(expectedMatches, actualMatches)
-        
+        |> Seq.toArray
+    Assert.Equal<Letter array>(expectedMatches, actualMatches)

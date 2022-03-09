@@ -5,7 +5,7 @@ module GameService =
     open System
 
     let private winningAttempt attempt =
-        attempt |> List.forall (fun l -> l.Color = Green)
+        attempt |> Array.forall (fun l -> l.Color = Green)
 
     let private winningMessage remainingTries =
         match remainingTries with
@@ -18,7 +18,7 @@ module GameService =
 
     let private updateBoard context attempt =
         let board = context.Board
-        attempt |> List.iteri (fun i l -> board[i, 6 - context.RemainingTries] <- l)
+        attempt |> Array.iteri (fun i l -> board[i, 6 - context.RemainingTries] <- l)
         { context with Board = board }
     
     let private processEnter context =
@@ -48,7 +48,7 @@ module GameService =
                     Index = 0
                     Value = c
                     Color = Gray })
-                 |> Seq.toList
+                 |> Seq.toArray
             let updatedBoardContext = updateBoard context guessBuffer
             {updatedBoardContext with 
                 Guess = guess.Replace(" ", "")
@@ -66,7 +66,7 @@ module GameService =
                     Index = 0
                     Value = c
                     Color = Gray })
-                |> Seq.toList
+                |> Seq.toArray
             let updatedBoardContext = updateBoard context guessBuffer
             {updatedBoardContext with 
                 Guess = updatedGuess 
