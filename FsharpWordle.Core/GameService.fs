@@ -29,13 +29,13 @@ module GameService =
             let updatedBoardContext = updateBoard context attempt
             let keyboard = KeyboardService.updateKeyboard updatedBoardContext.Keyboard attempt
             let won = winningAttempt attempt
-
+            let remaining = context.RemainingTries - 1
             { updatedBoardContext with 
                 Keyboard = keyboard
                 Guess = ""
                 KeyPressed = None
-                RemainingTries = if won then 0 else context.RemainingTries - 1
-                Message = if won then winningMessage(context.RemainingTries - 1) else "" }
+                RemainingTries = if won then 0 else remaining
+                Message = if won then winningMessage(remaining) else if remaining = 0 then "Sorry, you lost" else "" }
         else { context with Message = "Not in Word list" }
 
     let private processBackspace context =

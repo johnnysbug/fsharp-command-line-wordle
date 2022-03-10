@@ -4,7 +4,13 @@ open FsharpWordle.Core
 open FsharpWordle.Core.Domain
 open System
 
-let rec main context =    
+let mutable windowWidth = Console.WindowWidth
+
+let rec main context =
+    if windowWidth <> Console.WindowWidth then
+        windowWidth <- Console.WindowWidth
+        Console.Clear()
+        
     RenderService.drawBoard(context.Board, context.Message)
     RenderService.drawKeyboard(context.Keyboard)
 
@@ -16,4 +22,6 @@ let rec main context =
     main(GameService.takeTurn({context with KeyPressed = Some(info)}))
 
 [<EntryPoint>]
+Console.Clear()
+Console.CursorVisible <- false
 main(GameService.createContext(WordService.randomWord()))

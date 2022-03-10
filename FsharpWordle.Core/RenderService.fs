@@ -30,7 +30,7 @@ module RenderService =
         Console.WriteLine()
 
     let drawBoard (board: Letter[,], message: string) =
-        Console.Clear()
+        Console.SetCursorPosition(0, 0)
         let playableWidth = 41
         let title = "F# Commandline Wordle"
         let titleLength = title.Length
@@ -50,6 +50,8 @@ module RenderService =
         
         let messageLength = message.Length
         let padding = (playableWidth / 2) - messageLength / 2
+        let fillerLength = playableWidth - (messageLength + padding)
+        let filler = String.init fillerLength (fun _ -> " ")
         [1..padding] |> Seq.iter (fun _ -> Console.Write(" "))
-        Console.WriteLine($"{message}")
+        Console.WriteLine($"{message}{filler}")
         Console.WriteLine()
